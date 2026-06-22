@@ -2,7 +2,7 @@
 import pygame
 import random
 from player import *
-from doorN import *
+
 #-----------------------------------------------------------
 #initialization
 pygame.init()
@@ -13,10 +13,36 @@ pygame.display.set_caption("Escape Root")
 #constants and variables
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 1024
+class Doors:
+    def __init__(self, screen, direction):
+        self.screen = screen
+        self.image = pygame.image.load(doorMode).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/4), int(self.image.get_height()/4)))
+        self.rect = self.image.get_rect()
+        if direction == "up":
+            self.rect.center = (500, 126)
+            self.image = pygame.transform.scale_by(self.image, 1.6)
+        elif direction == "down":
+            self.rect.center = (512, 900)
+            self.image = pygame.transform.rotate(self.image, 180)
+        elif direction == "left":
+            self.rect.center = (145, 512)
+            self.image = pygame.transform.rotate(self.image, 90)
+        elif direction == "right":
+            self.rect.center = (915, 512)
+            self.image = pygame.transform.rotate(self.image, 270)
+    def blit(self):
+        self.screen.blit(self.image, self.rect)
+        
+doorModeBright = "door.png"
+doorModeDark = "doorDarkmode.png"
+doorMode = doorModeDark
 scoreFont = pygame.font.SysFont("Arial", 30)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
-background = pygame.image.load("arena.png")
+arena = pygame.image.load("arena.png")
+arenaDarkmode = pygame.image.load("arenaDarkmode.png")
+mapsblit = arena
 logo = pygame.image.load("logo.png")
 enemy = pygame.image.load("enemy.png")
 musicMenu = pygame.image.load("musicMenu.png")
@@ -198,7 +224,7 @@ while run == True:
     if currentRoom in trapRooms:
         screen.blit(enemy, (0, 0))
         deathMessage = random.choice(deathText)
-        loseText = scoreFont.render(deathMessage.format(deathMessage=deathMessage), True, (255, 255, 0))
+        loseText = scoreFont.render(deathMessage.format(deathMessage=deathMessage), True, (255, 255, 255))
         screen.blit(loseText, (100, 800))
         pygame.display.update()
         pygame.time.delay(3000)
@@ -207,16 +233,27 @@ while run == True:
         restart = True
     if keys[pygame.K_ESCAPE]:
         run = False
+    if keys[pygame.K_u]:
+        if mapsblit == arena:
+            mapsblit = arenaDarkmode
+            doorMode = doorModeDark
+            pygame.time.delay(500)
+
+        elif mapsblit == arenaDarkmode:
+            mapsblit = arena
+            doorMode = doorModeBright
+            pygame.time.delay(500)
+
     if timer <= 0:
         screen.blit(enemy, (0, 0))
-        timeOver = scoreFont.render("Time's Up! You failed to escape in time!(Try to actually move!)", True, (255, 255, 0))
+        timeOver = scoreFont.render("Time's Up! You failed to escape in time!(Try to actually move!)", True, (255, 255, 255))
         screen.blit(timeOver, (100, 800))
         pygame.display.update()
         pygame.time.delay(3000)
         restart = True
 #-----------------------------------------------------------
     #showing entities
-    screen.blit(background, (0, 0))
+    screen.blit(mapsblit, (0, 0))
 
     if showUp == True: 
         doorUp.blit()
