@@ -51,7 +51,7 @@ player.rect.center = (512, 512)
 
 while run == True:
 #-----------------------------------------------------------
-    #door visibility logic
+    #door visibility
     showLeft = True
     showRight = True
     showUp = True
@@ -60,7 +60,7 @@ while run == True:
     mins = timer // 600000
     sec = (timer // 10000) % 60
 #-----------------------------------------------------------
-    #restart logic
+    #restart
     if restart == True:
         player = Character(screen)
         player.rect.center = (512, 512)
@@ -96,9 +96,6 @@ while run == True:
         player.MoveDown(currentSpeed)
     if keys[pygame.K_d]: 
         player.MoveRight(currentSpeed)
-
-    
-
 #-----------------------------------------------------------
     #music
 
@@ -183,8 +180,6 @@ while run == True:
             pygame.mixer.music.play(-1)
         except Exception as e:
             print("Error loading music:", e)
-    
-
 #-----------------------------------------------------------
     #door logic
     if player.rect.top < 150 and showUp == True and player.rect.centerx > 444 and player.rect.centerx < 590:
@@ -203,7 +198,7 @@ while run == True:
     if currentRoom in trapRooms:
         screen.blit(enemy, (0, 0))
         deathMessage = random.choice(deathText)
-        loseText = scoreFont.render(deathMessage.format(deathMessage=deathMessage), True, (255, 0, 0))
+        loseText = scoreFont.render(deathMessage.format(deathMessage=deathMessage), True, (255, 255, 0))
         screen.blit(loseText, (100, 800))
         pygame.display.update()
         pygame.time.delay(3000)
@@ -214,7 +209,7 @@ while run == True:
         run = False
     if timer <= 0:
         screen.blit(enemy, (0, 0))
-        timeOver = scoreFont.render("Time's Up! You failed to escape in time!", True, (255, 0, 0))
+        timeOver = scoreFont.render("Time's Up! You failed to escape in time!(Try to actually move!)", True, (255, 255, 0))
         screen.blit(timeOver, (100, 800))
         pygame.display.update()
         pygame.time.delay(3000)
@@ -232,8 +227,9 @@ while run == True:
     if showRight == True: 
         doorRight.blit()
 
+
     player.blit()  
-    roomText = scoreFont.render(f"Room: {currentRoom}         time: {timer//600000}m{sec}s             J: Music K: Movement M: Map", True, (255, 255, 255))
+    roomText = scoreFont.render(f"Room: {currentRoom}         time: {mins}m{sec}s             J: Music K: Movement M: Map", True, (255, 255, 255))
     screen.blit(roomText, (0, 0))
     screen.blit(logo, (915, 0))
     if keys[pygame.K_j]:
