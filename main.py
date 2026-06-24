@@ -39,7 +39,7 @@ fontcolour = 245, 205, 110
 darkmode = False
 doorModeBright = "door.png"
 doorModeDark = "doorDarkmode.png"
-scoreFont = pygame.font.SysFont("Arial", 30)
+scoreFont = pygame.font.Font("quillswordrotate.ttf", 40)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 arena = pygame.image.load("arena.png")
@@ -61,7 +61,7 @@ currentRoom = random.choice(validRooms)
 deathText = ["You slipped on a banana peel and died!","You stepped on a lego and died from the pain!","You were eaten by a hungry infant!","You fell into a puddle of water!","You forgot to eat breakfast and starved to death!","You were teleported into the sun!","You charged straight into a wall. Bold strategy", "You were attacked by a swarm of imaginary bees!",
              "You were hit by a falling piano!","You jumped too high and hit your head on the ceiling!","You forgot to breathe!","You got scared to death by a spider!","You sneezed too hard and died!","You lost a fight with the door!","I told you that room was sketchy!","I don't even know what to say",
              "It says here that you... died? What did you do?","That was on you buddy!","Honestly, it's best if we both pretend that never happened","Moments like this really explain the whole “switched at birth” situation","Your mom was right...you really are...special","Bro i'm telling your friends about this one!","Hint: THE POINT OF THIS GAME IS TO ESCAPE!",
-             "Wrong room buddy!","You have been executed by a intrusive thought!","YOU WON...... wait no you lost!","It hurts to watch you play","At least you didn't die of embarrassment","Congratulations! You discovered a new way to fail. I'm writing this one down"]
+             "Wrong room buddy!","You have been executed by a intrusive thought!","You won but... you died of excitement.","It hurts to watch you play","At least you didn't die of embarrassment","Congratulations! You discovered a new way to fail. I'm writing this one down"]
 restart = False
 exitRoom = random.randint(1, 49)
 musicVol = 0.5
@@ -209,6 +209,14 @@ while run == True:
             pygame.mixer.music.play(-1)
         except Exception as e:
             print("Error loading music:", e)
+    if currentRoom == 1:
+        screen.blit(enemy, (0, 0))
+        room1 = "You Entered room 1(i dont like this room) ps. you died(i dont like you)"
+        room1Text = scoreFont.render(room1, True, (fontcolour))
+        screen.blit(room1Text, (100, 800))
+        pygame.display.update()
+        pygame.time.delay(3000)
+        restart = True
 #-----------------------------------------------------------
     #door logic
     if player.rect.top < 150 and showUp == True and player.rect.centerx > 444 and player.rect.centerx < 590:
@@ -272,9 +280,11 @@ while run == True:
 
 
     player.blit()  
-    roomText = scoreFont.render(f"Room: {currentRoom}         time: {mins}m{sec}s         J: Music K: Movement M: Map U:Change mode", True, (fontcolour))
+    roomText = scoreFont.render(f"Room: {currentRoom}         time: {mins}m{sec}s", True, (fontcolour))
+    roomText1 = scoreFont.render("J: Music K: Movement M: Map U:Change mode", True, (fontcolour))
     screen.blit(roomText, (0, 0))
-    screen.blit(logo, (915, 0))
+    screen.blit(roomText1, (400, 0))
+    screen.blit(logo, (915, 25))
     if keys[pygame.K_j]:
         screen.blit(musicMenu, (0, 0))
     if keys[pygame.K_k]:
